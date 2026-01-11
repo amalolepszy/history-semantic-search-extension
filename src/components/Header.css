@@ -21,3 +21,32 @@
   box-sizing: border-box;
   font-size: 14px;
 }
+
+.search-group {
+  display: flex;
+  gap: 8px;
+}
+
+.search-box {
+  flex: 1; /* Input takes available space */
+}
+
+.btn-semantic {
+  background-color: #673ab7; /* Purple for AI */
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 0 12px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.btn-semantic:hover {
+  background-color: #5e35b1;
+}
+
+.btn-semantic:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
