@@ -3,7 +3,7 @@
   "name": "React History Explorer",
   "description": "Browse history in the side panel using React",
   "version": "1.0",
-  "permissions": ["history", "sidePanel"],
+  "permissions": ["history", "sidePanel", "storage"],
   "side_panel": {
     "default_path": "index.html"
   },
@@ -17,5 +17,8 @@
     "16": "logo192.png",
     "48": "logo192.png",
     "128": "logo192.png"
-  }
+  },
+  "host_permissions": [
+    "https://api.openai.com/*"
+  ]
 }
