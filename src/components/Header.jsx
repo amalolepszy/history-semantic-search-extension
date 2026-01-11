@@ -20,7 +20,7 @@ const Header = ({ searchTerm, onSearch, onSemanticSearch, isSearching }) => {
           disabled={isSearching}
           title="AI Semantic Search"
         >
-          {isSearching ? '...' : '🤖'}
+          {isSearching ? '...' : 'Search!'}
         </button>
       </div>
     </header>
