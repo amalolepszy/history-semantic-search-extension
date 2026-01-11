@@ -21,21 +21,26 @@ const HistoryItem = ({ item }) => {
     }
   };
 
+  // Calculate percentage match
+  const matchScore = item.score ? Math.round(item.score * 100) : null;
+
   return (
-    <div className="history-card">
-      <a
-        href={item.url}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="history-link"
-        title={item.title} // Tooltip on hover
-      >
+    <div className="history-card" style={{ borderColor: matchScore > 80 ? '#673ab7' : '#e0e0e0' }}>
+      <a href={item.url} target="_blank" rel="noopener noreferrer" className="history-link">
         {item.title || "Untitled Page"}
       </a>
 
       <div className="history-meta">
         <span className="date-text">{formattedDate}</span>
-        <span className="domain-pill">{getDomain(item.url)}</span>
+
+        <div style={{ display: 'flex', gap: '5px' }}>
+          {matchScore && (
+            <span className="domain-pill" style={{ backgroundColor: '#ede7f6', color: '#673ab7' }}>
+              {matchScore}% Match
+            </span>
+          )}
+          <span className="domain-pill">{getDomain(item.url)}</span>
+        </div>
       </div>
     </div>
   );
