@@ -1,0 +1,46 @@
+.api-key-container {
+  padding: 10px 16px;
+  background-color: #f1f3f4;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.key-input-group {
+  display: flex;
+  gap: 8px;
+}
+
+.input-key {
+  flex: 1;
+  padding: 6px 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 13px;
+}
+
+.btn-save {
+  background-color: #1a73e8;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 0 12px;
+  cursor: pointer;
+  font-size: 13px;
+}
+
+.key-status {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 13px;
+  color: #137333;
+  font-weight: 500;
+}
+
+.btn-text {
+  background: none;
+  border: none;
+  color: #1a73e8;
+  cursor: pointer;
+  text-decoration: underline;
+  font-size: 12px;
+}
