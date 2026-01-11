@@ -1,0 +1,21 @@
+{
+  "manifest_version": 3,
+  "name": "React History Explorer",
+  "description": "Browse history in the side panel using React",
+  "version": "1.0",
+  "permissions": ["history", "sidePanel"],
+  "side_panel": {
+    "default_path": "index.html"
+  },
+  "background": {
+    "service_worker": "service-worker.js"
+  },
+  "action": {
+    "default_title": "Open History"
+  },
+  "icons": {
+    "16": "logo192.png",
+    "48": "logo192.png",
+    "128": "logo192.png"
+  }
+}
