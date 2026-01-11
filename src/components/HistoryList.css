@@ -1,0 +1,12 @@
+.history-list-container {
+  flex: 1;
+  overflow-y: auto;
+  padding: 12px;
+}
+
+.no-data {
+  text-align: center;
+  color: #5f6368;
+  margin-top: 30px;
+  font-size: 14px;
+}

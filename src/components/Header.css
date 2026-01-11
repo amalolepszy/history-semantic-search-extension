@@ -1,0 +1,23 @@
+.header-container {
+  padding: 16px;
+  background-color: #ffffff;
+  border-bottom: 1px solid #e0e0e0;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.header-title {
+  margin: 0 0 12px 0;
+  font-size: 1.1rem;
+  color: #202124;
+}
+
+.search-box {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #dadce0;
+  border-radius: 6px;
+  box-sizing: border-box;
+  font-size: 14px;
+}
