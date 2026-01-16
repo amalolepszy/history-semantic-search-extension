@@ -1,70 +1,60 @@
-# Getting Started with Create React App
+# 🧠 History Semantic Search Extension
+A Manifest V3 Chrome Extension that replaces the standard history view with an AI-powered Semantic Search side panel.
+Unlike standard history search which only matches exact keywords, this extension uses OpenAI Embeddings and Vector Search to understand the meaning of your search query.
+Example: Searching for "how to center a div" will return results about CSS Flexbox or Grid tutorials, even if the exact phrase isn't in the title.
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## ✨ Features
+- 🔍 Semantic Search: Find history entries by concept, not just keywords.
+- ⚡ Real-time Indexing: Automatically generates embeddings for every new page you visit.
+- 📂 Native Side Panel: Integrates seamlessly into the Chrome browser interface.
+- 🔐 Private & Secure: Your OpenAI API Key is stored locally in your browser (chrome.storage).
+- ⚛️ Built with React: Modern, responsive UI using React and Hooks.
 
-## Available Scripts
+## 🚀 Quick start
+### 1. Clone the repository
+```
+git clone https://github.com/amalolepszy/history-semantic-search-extension.git
+cd history-semantic-search-extension
+```
+### 2. Load into Chrome
+  1. Open Chrome and navigate to `chrome://extensions/`.
+  2. Toggle Developer mode in the top right corner.
+  3. Click the Load unpacked button.
+  4. Select the `build` from the repository.
 
-In the project directory, you can run:
+##  Development Guide
+### Prerequisites
+- Node.js & npm installed.
 
-### `npm start`
+### 1. Clone the repository
+```
+git clone https://github.com/amalolepszy/history-semantic-search-extension.git
+cd history-semantic-search-extension
+```
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+### 2. Install Dependencies
+```
+npm install
+```
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+### 3. Build the extension
+```
+npm run build
+```
+## 📖 How to Use
+### 1. Setup API Key
+  1. Click the extension icon in the Chrome toolbar to open the Side Panel.
+  2. Paste your OpenAI API Key (starts with sk-...) into the input field at the top.
+  3. Click Save.
 
-### `npm test`
+### 2. Browsing (Automatic Indexing)
+  1. Just browse the web as normal!
+  2. When you visit a page, the extension detects it.
+  3. It sends the title and URL to OpenAI to generate a "vector" (embedding).
+  4. This vector is saved locally in your browser.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `npm run build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+### 3. Performing a Semantic Search
+  1. Open the Side Panel.
+  2. Type a concept (e.g., "funny cat videos" or "coding tutorials").
+  3. Click the **Search!** button or press Enter.
+  4. The extension calculates the cosine similarity between your query and your history, showing the most relevant results first with a Match Score (e.g., 85% Match).
