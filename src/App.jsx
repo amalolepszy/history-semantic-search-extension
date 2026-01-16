@@ -4,6 +4,7 @@ import Header from './components/Header';
 import HistoryList from './components/HistoryList';
 import ApiKeyInput from './components/ApiKeyInput';
 import { cosineSimilarity } from './utils/cosine_similarity';
+import { generateEmbedding } from './utils/generate_embedding';
 import './App.css';
 
 function App() {
@@ -11,53 +12,64 @@ function App() {
   const [searchTerm, setSearchTerm] = useState('');
   const [isSearching, setIsSearching] = useState(false);
 
+  // 1. Fetch History & Trigger Embedding Generation
   const fetchHistory = (query = '') => {
     if (typeof chrome !== 'undefined' && chrome.history) {
-      chrome.history.search({ text: query, maxResults: 50 }, (results) => {
+      // startTime <- makes it so that entries older than 24hrs appear
+      chrome.history.search({ text: query, maxResults: 50, startTime: 0 }, (results) => {
         setHistoryItems(results);
-        
-        // After fetching history, check which ones are missing embeddings
-        triggerMissingEmbeddings(results);
+        generateEmbeddingsForBatch(results);
       });
     }
   };
 
-  // Helper to find missing embeddings and notify Service Worker
-  const triggerMissingEmbeddings = (items) => {
-    if (!items || items.length === 0) return;
+  // 2. Process Batch Logic
+  const generateEmbeddingsForBatch = async (items) => {
+    if (!items || items.length === 0) {
+      return;
+    }
 
-    // Create a list of keys to check: "vec_123", "vec_124", etc.
-    const keysToCheck = items.map(item => `vec_${item.id}`);
-
-    chrome.storage.local.get(keysToCheck, (storageData) => {
-      const missingItems = [];
-
-      items.forEach(item => {
-        const key = `vec_${item.id}`;
-        // If the key is undefined in storage, we need to generate it
-        if (!storageData[key]) {
-          missingItems.push(item);
-        }
-      });
-
-      if (missingItems.length > 0) {
-        console.log(`Requesting embeddings for ${missingItems.length} items...`);
-        // Send the list to the Service Worker
-        chrome.runtime.sendMessage({ 
-          action: "generate_missing_embeddings", 
-          items: missingItems 
-        });
+    try {
+      // Get API Key
+      const data = await chrome.storage.local.get("openai_key");
+      const apiKey = data.openai_key;
+      if (!apiKey) {
+        return;
       }
-    });
+
+      // Filter for missing items
+      const keysToCheck = items.map(item => `vec_${item.id}`);
+      const storageData = await chrome.storage.local.get(keysToCheck);
+      const missingItems = items.filter(item => !storageData[`vec_${item.id}`]);
+
+      if (missingItems.length === 0) {
+        return;
+      }
+
+      console.log(`Generating embeddings for ${missingItems.length} items...`);
+
+      // Loop through missing items
+      for (const item of missingItems) {
+        const textToEmbed = `${item.title || "Untitled"} - ${item.url}`;
+
+        const embedding = await generateEmbedding(textToEmbed, apiKey);
+
+        if (embedding) {
+          await chrome.storage.local.set({ [`vec_${item.id}`]: embedding });
+          console.log(`Saved embedding for: ${item.title}`);
+        }
+      }
+    } catch (error) {
+      console.error("Batch processing failed:", error);
+    }
   };
-  
-  // Search for most similar phrase based on the cosine distance of the embeddings.
+
+  // 3. Semantic Search Logic
   const performSemanticSearch = async () => {
     if (!searchTerm) return;
     setIsSearching(true);
 
     try {
-      // 1. Get API Key
       const storage = await chrome.storage.local.get("openai_key");
       const apiKey = storage.openai_key;
       if (!apiKey) {
@@ -66,41 +78,26 @@ function App() {
         return;
       }
 
-      // 2. Generate Embedding for the Search Term
-      const response = await fetch("https://api.openai.com/v1/embeddings", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": `Bearer ${apiKey}`
-        },
-        body: JSON.stringify({
-          model: "text-embedding-3-small",
-          input: searchTerm
-        })
-      });
+      const queryVector = await generateEmbedding(searchTerm, apiKey);
 
-      const data = await response.json();
-      if (!data.data) throw new Error("Failed to generate embedding");
-      const queryVector = data.data[0].embedding;
+      if (!queryVector) {
+        throw new Error("Failed to embed query");
+      }
 
-      // 3. Fetch ALL stored history vectors
-      // Note: fetching null gets EVERYTHING. For production, organize data better.
+      // Fetch all vectors and rank
       const allStorage = await chrome.storage.local.get(null);
-      
-      // 4. Calculate Scores
+
       const scoredItems = historyItems.map(item => {
         const itemVector = allStorage[`vec_${item.id}`];
-        if (!itemVector) return { ...item, score: 0 }; // No vector yet
-        
-        const score = cosineSimilarity(queryVector, itemVector);
-        return { ...item, score };
+        if (!itemVector) {
+          return { ...item, score: 0 };
+        }
+        return { ...item, score: cosineSimilarity(queryVector, itemVector) };
       });
 
-      // 5. Sort by Score (Highest first)
-      const sorted = scoredItems.sort((a, b) => b.score - a.score);
-      
-      // Filter out totally irrelevant results (optional threshold)
-      setHistoryItems(sorted.filter(item => item.score > 0.25));
+      // Sort by score
+      const sortedItems = scoredItems.sort((a, b) => b.score - a.score);
+      setHistoryItems(sortedItems);
 
     } catch (err) {
       console.error(err);
@@ -112,7 +109,7 @@ function App() {
 
   useEffect(() => {
     fetchHistory();
-    
+
     const handleMessage = (message) => {
       if (message.action === "history_updated") {
         fetchHistory(searchTerm);
@@ -123,19 +120,14 @@ function App() {
       chrome.runtime.onMessage.addListener(handleMessage);
       return () => chrome.runtime.onMessage.removeListener(handleMessage);
     }
-  }, []);
-
-  // const handleSearch = (text) => {
-  //   setSearchTerm(text);
-  //   fetchHistory(text);
-  // };
+  }, [searchTerm]);
 
   return (
     <div className="App">
       <ApiKeyInput />
-      <Header 
-        searchTerm={searchTerm} 
-        onSearch={setSearchTerm} 
+      <Header
+        searchTerm={searchTerm}
+        onSearch={(text) => { setSearchTerm(text); fetchHistory(text); }}
         onSemanticSearch={performSemanticSearch}
         isSearching={isSearching}
       />
