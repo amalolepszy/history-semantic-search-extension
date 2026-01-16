@@ -50,8 +50,17 @@ function App() {
 
       // Loop through missing items
       for (const item of missingItems) {
-        const textToEmbed = `${item.title || "Untitled"} - ${item.url}`;
+        const formattedDate = new Date(item.lastVisitTime).toLocaleString(undefined, {
+          year: 'numeric',
+          month: 'short',
+          day: 'numeric',
+          hour: '2-digit',
+          minute: '2-digit'
+        });
 
+        const textToEmbed = `Title: ${item.title || "Untitled"} - URL: ${item.url} - Last Visit Time: ${formattedDate} - Visit Count: ${item.visitCount}`;
+
+        console.log(`Generating embedding for: ${item.title}`);
         const embedding = await generateEmbedding(textToEmbed, apiKey);
 
         if (embedding) {
