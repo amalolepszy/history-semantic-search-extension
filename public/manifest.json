@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
-  "name": "React History Explorer",
-  "description": "Browse history in the side panel using React",
+  "name": "History Semantic Search",
+  "description": "Browse history semantically in the side panel",
   "version": "1.0",
   "permissions": ["history", "sidePanel", "storage"],
   "side_panel": {
@@ -15,6 +15,7 @@
   },
   "icons": {
     "16": "logo192.png",
+    "32": "logo192.png",
     "48": "logo192.png",
     "128": "logo192.png"
   },
