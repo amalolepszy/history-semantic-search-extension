@@ -50,3 +50,17 @@
   background-color: #ccc;
   cursor: not-allowed;
 }
+
+.ai-agent-btn {
+  background-color: rgb(11, 207, 11);
+  color: white;
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #dadce0;
+  border-radius: 6px;
+  box-sizing: border-box;
+  font-size: 14px;
+}
+.ai-agent-btn:hover {
+  background-color: rgb(0, 180, 0);
+}
