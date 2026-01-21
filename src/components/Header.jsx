@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import './Header.css';
-import Agent from './Agent';
-const Header = ({ searchTerm, onSearch, onSemanticSearch, isSearching }) => {
+const Header = ({ searchTerm, onSearch, onSemanticSearch, isSearching, onOpenChat }) => {
   const [agentOpen, setAgentOpen] = useState(false);
   return (
     <header className="header-container">
@@ -24,10 +23,9 @@ const Header = ({ searchTerm, onSearch, onSemanticSearch, isSearching }) => {
           {isSearching ? '...' : 'Search!'}
         </button>
       </div>
-      <button className="ai-agent-btn" onClick={() => setAgentOpen(true)}>
-          AI Agent
+      <button className="ai-agent-btn" onClick={onOpenChat}>
+        AI Agent
       </button>
-      <Agent isOpen={agentOpen} onClose={() => setAgentOpen(false)} />
     </header>
   );
 };
