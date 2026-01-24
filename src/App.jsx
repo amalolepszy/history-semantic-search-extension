@@ -5,12 +5,16 @@ import HistoryList from './components/HistoryList';
 import ApiKeyInput from './components/ApiKeyInput';
 import { cosineSimilarity } from './utils/cosine_similarity';
 import { generateEmbedding } from './utils/generate_embedding';
+import ChatUI from './components/ChatUI';       // chat z agentem
 import './App.css';
 
 function App() {
   const [historyItems, setHistoryItems] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [isSearching, setIsSearching] = useState(false);
+
+  const [isChat, setIsChat] = useState(false);
+
 
   // 1. Fetch History & Trigger Embedding Generation
   const fetchHistory = (query = '') => {
@@ -133,14 +137,22 @@ function App() {
 
   return (
     <div className="App">
-      <ApiKeyInput />
-      <Header
-        searchTerm={searchTerm}
-        onSearch={(text) => { setSearchTerm(text); fetchHistory(text); }}
-        onSemanticSearch={performSemanticSearch}
-        isSearching={isSearching}
-      />
-      <HistoryList items={historyItems} />
+
+      {!isChat && (
+        <>
+          <ApiKeyInput />
+          <Header
+            searchTerm={searchTerm}
+            onSearch={(text) => { setSearchTerm(text); fetchHistory(text); }}
+            onSemanticSearch={performSemanticSearch}
+            isSearching={isSearching}
+            onOpenChat={() => setIsChat(true)} 
+          />
+          <HistoryList items={historyItems} />
+        </>
+      )}
+
+      {isChat && <ChatUI onClose={() => setIsChat(false)} />}
     </div>
   );
 }
