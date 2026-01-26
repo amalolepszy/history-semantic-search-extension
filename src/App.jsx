@@ -62,8 +62,10 @@ function App() {
           minute: '2-digit'
         });
 
-        const textToEmbed = `Title: ${item.title || "Untitled"} - URL: ${item.url} - Last Visit Time: ${formattedDate} - Visit Count: ${item.visitCount}`;
+        const clearURL = item.url ? item.url.replace(/^(?:https?:\/\/)?(?:www\.)?/i, "") : "";
+        const textToEmbed = `Title: ${item.title || "Untitled"} - URL: ${clearURL} - Last Visit Time: ${formattedDate} - Visit Count: ${item.visitCount}`;
 
+        console.log('TextToEmbedd',textToEmbed)
         console.log(`Generating embedding for: ${item.title}`);
         const embedding = await generateEmbedding(textToEmbed, apiKey);
 
