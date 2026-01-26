@@ -1,6 +1,8 @@
+
 import React, { useState, useEffect, useRef } from 'react';
 import HistoryUI from './HistoryUI';
 import './ChatUI.css';
+import { getFormattedUrl } from '../utils/format_url';
 
 const ChatUI = ({ onClose }) => {
   const [message, setMessage] = useState('');

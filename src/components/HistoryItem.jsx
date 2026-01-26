@@ -11,18 +11,6 @@ const HistoryItem = ({ item }) => {
     minute: '2-digit'
   });
 
- const getFormattedUrl = (url) => {
-    if (!url) return '';
-    // Remove http/https and www.
-    const cleanUrl = url.replace(/^(?:https?:\/\/)?(?:www\.)?/i, "");
-    
-    // Truncate to 60 characters (57 + '...')
-    if (cleanUrl.length > 60) {
-      return cleanUrl.substring(0, 57) + '...';
-    }
-    return cleanUrl;
-  };
-
   
   // Helper to strip "www." and get hostname
   const getDomain = (url) => {
