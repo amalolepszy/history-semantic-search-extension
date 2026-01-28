@@ -3,14 +3,46 @@ import React, { useState, useEffect, useRef } from 'react';
 import HistoryUI from './HistoryUI';
 import './ChatUI.css';
 import { generateChatCompletion } from '../utils/openai';
+import { getFormattedUrl, formatDate } from '../utils/history_data_formatters';
 
 const ChatUI = ({ onClose }) => {
   const [message, setMessage] = useState('');
   const [chatHistory, setChatHistory] = useState([
-    { type: 'agent', text: 'Hello! I am ready to chat.' }
+    { type: 'agent', text: 'Hello! I have analyzed your last 100 history entries. Ask me anything about them!' }
   ]);
   const [isLoading, setIsLoading] = useState(false);
+
+  // New state to hold the "Knowledge Base" string
+  const [historyContext, setHistoryContext] = useState('');
+
   const messagesEndRef = useRef(null);
+
+  // 1. Fetch and Format History on Mount
+  useEffect(() => {
+    const buildKnowledgeBase = async () => {
+      if (typeof chrome !== 'undefined' && chrome.history) {
+        // Fetch last 100 items
+        const items = await chrome.history.search({
+          text: '',
+          maxResults: 100,
+          startTime: 0
+        });
+
+        // Construct the context string
+        const contextString = items.map(item => {
+          const date = formatDate(item.lastVisitTime);
+          const url = getFormattedUrl(item.url);
+          const title = item.title || "Untitled Page";
+          return `- [${date}] ${title} (${url})`;
+        }).join('\n');
+
+        setHistoryContext(contextString);
+        console.log("Knowledge Base built with length:", contextString.length);
+      }
+    };
+
+    buildKnowledgeBase();
+  }, []);
 
   const handleSend = async () => {
     if (!message.trim() || isLoading) return;
@@ -19,38 +51,50 @@ const ChatUI = ({ onClose }) => {
     setMessage('');
     setIsLoading(true);
 
-    // 1. Add User Message to UI
+    // Add user message to UI
     const newHistory = [...chatHistory, { type: 'user', text: userText }];
     setChatHistory(newHistory);
 
     try {
-      // 2. Get API Key
       const storage = await chrome.storage.local.get("openai_key");
       const apiKey = storage.openai_key;
 
       if (!apiKey) {
-        setChatHistory(prev => [...prev, { type: 'agent', text: "Error: API Key missing." }]);
+        setChatHistory(prev => [...prev, { type: 'agent', text: "Please save your API Key first." }]);
         setIsLoading(false);
         return;
       }
 
-      // 3. Format messages for the OpenAI SDK
+      // 2. Create the System Prompt with Context
+      const systemPrompt = `
+You are a helpful AI browser assistant. 
+Here is the user's recent browsing history (last 100 entries):
+
+${historyContext}
+
+Instructions:
+- Answer the user's question based strictly on the history provided above.
+- If the answer is not in the history, say you don't see it in the recent logs.
+- Mention specific dates or site names if relevant.
+      `.trim();
+
+      // 3. Prepare messages
       const apiMessages = [
-        { role: "system", content: "You are a helpful assistant." },
+        { role: "system", content: systemPrompt },
         ...newHistory.map(msg => ({
           role: msg.type === 'user' ? 'user' : 'assistant',
           content: msg.text
         }))
       ];
 
-      // 4. Call the SDK wrapper
+      // 4. Call Gemini
       const aiResponse = await generateChatCompletion(apiMessages, apiKey);
 
       setChatHistory(prev => [...prev, { type: 'agent', text: aiResponse }]);
 
     } catch (error) {
       console.error(error);
-      setChatHistory(prev => [...prev, { type: 'agent', text: "Sorry, something went wrong with the AI connection." }]);
+      setChatHistory(prev => [...prev, { type: 'agent', text: "Error connecting to AI." }]);
     } finally {
       setIsLoading(false);
     }
@@ -63,13 +107,13 @@ const ChatUI = ({ onClose }) => {
   return (
     <div className="chat-ui-container">
       <div className="chat-header">
-        <h4>AI Agent</h4>
+        <h4>AI History Chat</h4>
         <button onClick={onClose}>X</button>
       </div>
 
       <div className="chat-history">
         <HistoryUI chatHistory={chatHistory} />
-        {isLoading && <div style={{ padding: '10px', color: '#666', fontStyle: 'italic' }}>Thinking...</div>}
+        {isLoading && <div style={{ padding: '10px', color: '#666', fontStyle: 'italic' }}>Analyzing history...</div>}
         <div ref={messagesEndRef} />
       </div>
 
@@ -78,7 +122,7 @@ const ChatUI = ({ onClose }) => {
           rows={2}
           value={message}
           onChange={(e) => setMessage(e.target.value)}
-          placeholder="Type your message..."
+          placeholder="Ask about your browsing..."
           onKeyDown={(e) => e.key === 'Enter' && !e.shiftKey && handleSend()}
           disabled={isLoading}
         />
