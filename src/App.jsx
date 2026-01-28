@@ -4,7 +4,7 @@ import Header from './components/Header';
 import HistoryList from './components/HistoryList';
 import ApiKeyInput from './components/ApiKeyInput';
 import { cosineSimilarity } from './utils/cosine_similarity';
-import { generateEmbedding } from './utils/generate_embedding';
+import { generateEmbedding } from './utils/openai';
 import { getFormattedUrl } from './utils/format_url';
 import ChatUI from './components/ChatUI';       // chat z agentem
 import './App.css';
@@ -64,14 +64,11 @@ function App() {
           minute: '2-digit'
         });
 
-        
+        const formattedURL = getFormattedUrl(item.url)
 
-        const clearURL = getFormattedUrl(item.url,false)
+        const textToEmbed = `Title: ${item.title || "Untitled"} - URL: ${formattedURL} - Last Visit Time: ${formattedDate} - Visit Count: ${item.visitCount}`;
 
-
-        const textToEmbed = `Title: ${item.title || "Untitled"} - URL: ${clearURL} - Last Visit Time: ${formattedDate} - Visit Count: ${item.visitCount}`;
-
-        console.log('TextToEmbedd',textToEmbed)
+        console.log('TextToEmbedd', textToEmbed)
         console.log(`Generating embedding for: ${item.title}`);
         const embedding = await generateEmbedding(textToEmbed, apiKey);
 
@@ -154,13 +151,13 @@ function App() {
             onSearch={(text) => { setSearchTerm(text); fetchHistory(text); }}
             onSemanticSearch={performSemanticSearch}
             isSearching={isSearching}
-            onOpenChat={() => setIsChat(true)} 
+            onOpenChat={() => setIsChat(true)}
           />
           <HistoryList items={historyItems} />
         </>
       )}
 
-     {isChat && <ChatUI onClose={() => setIsChat(false)} />}
+      {isChat && <ChatUI onClose={() => setIsChat(false)} />}
     </div>
   );
 }

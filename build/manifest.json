@@ -20,6 +20,7 @@
     "128": "logo192.png"
   },
   "host_permissions": [
-    "https://api.openai.com/*"
+    "https://api.openai.com/*",
+    "https://generativelanguage.googleapis.com/*"
   ]
 }
