@@ -13,7 +13,7 @@ export async function generateChatCompletion(messages, apiKey) {
 
   try {
     const completion = await client.chat.completions.create({
-      model: "gemini-3-flash-preview",
+      model: "gemini-2.5-flash",
       messages: messages,
       temperature: 0.7,
     });
