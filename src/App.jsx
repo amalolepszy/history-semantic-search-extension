@@ -5,7 +5,7 @@ import HistoryList from './components/HistoryList';
 import ApiKeyInput from './components/ApiKeyInput';
 import { cosineSimilarity } from './utils/cosine_similarity';
 import { generateEmbedding } from './utils/openai';
-import { getFormattedUrl } from './utils/format_url';
+import { formatDate, getFormattedUrl } from './utils/history_data_formatters';
 import ChatUI from './components/ChatUI';       // chat z agentem
 import './App.css';
 
@@ -56,18 +56,10 @@ function App() {
 
       // Loop through missing items
       for (const item of missingItems) {
-        const formattedDate = new Date(item.lastVisitTime).toLocaleString(undefined, {
-          year: 'numeric',
-          month: 'short',
-          day: 'numeric',
-          hour: '2-digit',
-          minute: '2-digit'
-        });
-
+        const formattedLastVisitTime = formatDate(item.lastVisitTime);
         const formattedURL = getFormattedUrl(item.url)
 
-        const textToEmbed = `Title: ${item.title || "Untitled"} - URL: ${formattedURL} - Last Visit Time: ${formattedDate} - Visit Count: ${item.visitCount}`;
-
+        const textToEmbed = `Title: ${item.title || "Untitled"} - URL: ${formattedURL} - Last Visit Time: ${formattedLastVisitTime} - Visit Count: ${item.visitCount}`;
         console.log('TextToEmbedd', textToEmbed)
         console.log(`Generating embedding for: ${item.title}`);
         const embedding = await generateEmbedding(textToEmbed, apiKey);

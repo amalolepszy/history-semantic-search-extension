@@ -1,6 +1,6 @@
 import React from 'react';
 import './HistoryItem.css';
-import { getFormattedUrl } from '../utils/format_url';
+import { getFormattedUrl } from '../utils/history_data_formatters';
 
 
 const HistoryItem = ({ item }) => {
