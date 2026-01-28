@@ -3,7 +3,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import HistoryUI from './HistoryUI';
 import './ChatUI.css';
 import { generateChatCompletion } from '../utils/openai';
-import { getFormattedUrl, formatDate } from '../utils/history_data_formatters';
+import { getContextStringFromHistoryItem } from '../utils/history_data_formatters';
 
 const ChatUI = ({ onClose }) => {
   const [message, setMessage] = useState('');
@@ -30,14 +30,13 @@ const ChatUI = ({ onClose }) => {
 
         // Construct the context string
         const contextString = items.map(item => {
-          const date = formatDate(item.lastVisitTime);
-          const url = getFormattedUrl(item.url);
-          const title = item.title || "Untitled Page";
-          return `- [${date}] ${title} (${url})`;
+          const itemString = getContextStringFromHistoryItem(item);
+          return `- [${itemString}]`;
         }).join('\n');
 
         setHistoryContext(contextString);
         console.log("Knowledge Base built with length:", contextString.length);
+        console.log(contextString);
       }
     };
 

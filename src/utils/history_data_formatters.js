@@ -9,8 +9,9 @@ export const getFormattedUrl = (url) => {
   // Remove http://, https://, and www. (case insensitive)
   const cleanUrl = url.replace(/^(?:https?:\/\/)?(?:www\.)?/i, "");
 
-  if (cleanUrl.length > 100) {
-    return cleanUrl.substring(0, 100);
+  const URL_CUTOFF = 80;
+  if (cleanUrl.length > URL_CUTOFF) {
+    return cleanUrl.substring(0, URL_CUTOFF);
   }
 
   return cleanUrl;
@@ -29,4 +30,11 @@ export const formatDate = (date) => {
     hour: '2-digit',
     minute: '2-digit'
   });
+};
+
+export const getContextStringFromHistoryItem = (item) => {
+  const formattedLastVisitTime = formatDate(item.lastVisitTime);
+  const formattedURL = getFormattedUrl(item.url)
+
+  return `Title: ${item.title || "Untitled"} - URL: ${formattedURL} - Last Visit Time: ${formattedLastVisitTime} - Visit Count: ${item.visitCount}`;
 };
