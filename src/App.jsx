@@ -5,8 +5,10 @@ import HistoryList from './components/HistoryList';
 import ApiKeyInput from './components/ApiKeyInput';
 import { cosineSimilarity } from './utils/cosine_similarity';
 import { generateEmbedding } from './utils/generate_embedding';
+import { getFormattedUrl } from './utils/format_url';
 import ChatUI from './components/ChatUI';       // chat z agentem
 import './App.css';
+
 
 function App() {
   const [historyItems, setHistoryItems] = useState([]);
@@ -62,8 +64,14 @@ function App() {
           minute: '2-digit'
         });
 
-        const textToEmbed = `Title: ${item.title || "Untitled"} - URL: ${item.url} - Last Visit Time: ${formattedDate} - Visit Count: ${item.visitCount}`;
+        
 
+        const clearURL = getFormattedUrl(item.url,false)
+
+
+        const textToEmbed = `Title: ${item.title || "Untitled"} - URL: ${clearURL} - Last Visit Time: ${formattedDate} - Visit Count: ${item.visitCount}`;
+
+        console.log('TextToEmbedd',textToEmbed)
         console.log(`Generating embedding for: ${item.title}`);
         const embedding = await generateEmbedding(textToEmbed, apiKey);
 
@@ -152,7 +160,7 @@ function App() {
         </>
       )}
 
-      {isChat && <ChatUI onClose={() => setIsChat(false)} />}
+     {isChat && <ChatUI onClose={() => setIsChat(false)} />}
     </div>
   );
 }

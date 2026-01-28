@@ -1,5 +1,7 @@
 import React from 'react';
 import './HistoryItem.css';
+import { getFormattedUrl } from '../utils/format_url';
+
 
 const HistoryItem = ({ item }) => {
   // Format Date: "Jan 11, 2026, 3:30 PM"
@@ -11,6 +13,7 @@ const HistoryItem = ({ item }) => {
     minute: '2-digit'
   });
 
+  
   // Helper to strip "www." and get hostname
   const getDomain = (url) => {
     try {
@@ -29,7 +32,6 @@ const HistoryItem = ({ item }) => {
       <a href={item.url} target="_blank" rel="noopener noreferrer" className="history-link">
         {item.title || "Untitled Page"}
       </a>
-
       <div className="history-meta">
         <span className="date-text">{formattedDate}</span>
 
