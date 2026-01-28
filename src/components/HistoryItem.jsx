@@ -1,19 +1,10 @@
 import React from 'react';
 import './HistoryItem.css';
-import { getFormattedUrl } from '../utils/history_data_formatters';
-
+import { formatDate } from '../utils/history_data_formatters';
 
 const HistoryItem = ({ item }) => {
-  // Format Date: "Jan 11, 2026, 3:30 PM"
-  const formattedDate = new Date(item.lastVisitTime).toLocaleString(undefined, {
-    year: 'numeric',
-    month: 'short',
-    day: 'numeric',
-    hour: '2-digit',
-    minute: '2-digit'
-  });
+  const formattedDate = formatDate(item.lastVisitTime);
 
-  
   // Helper to strip "www." and get hostname
   const getDomain = (url) => {
     try {
@@ -26,18 +17,20 @@ const HistoryItem = ({ item }) => {
 
   // Calculate percentage match
   const matchScore = item.score ? Math.round(item.score * 100) : null;
+  const isHighMatch = matchScore && matchScore > 80;
 
   return (
-    <div className="history-card" style={{ borderColor: matchScore > 80 ? '#673ab7' : '#e0e0e0' }}>
+    <div className={`history-card ${isHighMatch ? 'high-match' : ''}`}>
       <a href={item.url} target="_blank" rel="noopener noreferrer" className="history-link">
         {item.title || "Untitled Page"}
       </a>
+      
       <div className="history-meta">
         <span className="date-text">{formattedDate}</span>
 
-        <div style={{ display: 'flex', gap: '5px' }}>
+        <div className="meta-tags">
           {matchScore && (
-            <span className="domain-pill" style={{ backgroundColor: '#ede7f6', color: '#673ab7' }}>
+            <span className="domain-pill match-pill">
               {matchScore}% Match
             </span>
           )}

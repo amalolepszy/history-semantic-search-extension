@@ -4,12 +4,20 @@
   margin-bottom: 10px;
   border: 1px solid #e0e0e0;
   border-radius: 8px;
-  transition: transform 0.1s ease, box-shadow 0.1s ease;
+  transition: transform 0.1s ease, box-shadow 0.1s ease, border-color 0.2s ease;
+}
+
+.history-card.high-match {
+  border-color: #673ab7;
 }
 
 .history-card:hover {
   box-shadow: 0 2px 5px rgba(0,0,0,0.1);
   border-color: #d2e3fc;
+}
+
+.history-card.high-match:hover {
+  border-color: #5e35b1;
 }
 
 .history-link {
@@ -32,6 +40,11 @@
   align-items: center;
 }
 
+.meta-tags {
+  display: flex;
+  gap: 5px;
+}
+
 .date-text {
   color: #70757a;
 }
@@ -46,4 +59,9 @@
   overflow: hidden;
   text-overflow: ellipsis;
   font-weight: 500;
+}
+
+.domain-pill.match-pill {
+  background-color: #ede7f6;
+  color: #673ab7;
 }
