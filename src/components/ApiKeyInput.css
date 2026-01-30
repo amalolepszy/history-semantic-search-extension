@@ -1,7 +1,7 @@
 .api-key-container {
-  padding: 10px 16px;
-  background-color: #f1f3f4;
-  border-bottom: 1px solid #e0e0e0;
+  padding: 12px 20px;
+  background-color: #fff;
+  border-bottom: 1px solid #f0f0f0;
 }
 
 .key-input-group {
@@ -11,45 +11,48 @@
 
 .input-key {
   flex: 1;
-  padding: 6px 8px;
-  border: 1px solid #ccc;
-  border-radius: 60px;
-  font-size: 10px;
+  padding: 8px 12px;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  font-size: 12px;
+  background: #f9fafb;
+  outline: none;
+}
+
+.input-key:focus {
+  border-color: #3b82f6;
+  background: #fff;
 }
 
 .btn-save {
-  background: #264aff;
-  background: linear-gradient(90deg,rgba(38, 74, 255, 1) 0%, rgba(255, 46, 88, 1) 100%);
+  background: #5B25FF;
+  background: linear-gradient(-90deg,rgba(91, 37, 255, 1) 0%, rgba(244, 0, 255, 1) 100%);
   color: white;
-  width: 100%;
-  border: 1px solid #dadce0;
-  border-radius: 60px;
-  box-sizing: border-box;
-  font-size: 10px;
+  border: none;
+  border-radius: 10px;
+  padding: 0 14px;
+  font-size: 11px;
+  font-weight: 600;
   text-transform: uppercase;
-  letter-spacing: 1px;
-  font-weight: 700;
   cursor: pointer;
-}
-
-.btn-save:hover {
-  filter: brightness(80%);
 }
 
 .key-status {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  font-size: 13px;
-  color: #137333;
-  font-weight: 500;
+  font-size: 12px;
+  color: #059669;
+  background: #ecfdf5;
+  padding: 8px 12px;
+  border-radius: 8px;
 }
 
 .btn-text {
   background: none;
   border: none;
-  color: #1a73e8;
+  color: #6b7280;
   cursor: pointer;
+  font-size: 11px;
   text-decoration: underline;
-  font-size: 12px;
 }

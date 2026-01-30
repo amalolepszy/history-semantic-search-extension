@@ -1,6 +1,5 @@
 /* global chrome */
 import React, { useState, useEffect, useRef } from 'react';
-import HistoryUI from './HistoryUI';
 import './ChatUI.css';
 import { generateChatCompletion } from '../utils/openai';
 import { getContextStringFromHistoryItem } from '../utils/history_data_formatters';
@@ -8,49 +7,29 @@ import { getContextStringFromHistoryItem } from '../utils/history_data_formatter
 const ChatUI = ({ onClose }) => {
   const [message, setMessage] = useState('');
   const [chatHistory, setChatHistory] = useState([
-    { type: 'agent', text: 'Hello! I have analyzed your last 100 history entries. Ask me anything about them!' }
+    { type: 'agent', text: 'Hello! I have analyzed your history. What would you like to ask?' }
   ]);
   const [isLoading, setIsLoading] = useState(false);
-
-  // New state to hold the "Knowledge Base" string
   const [historyContext, setHistoryContext] = useState('');
-
   const messagesEndRef = useRef(null);
 
-  // 1. Fetch and Format History on Mount
   useEffect(() => {
     const buildKnowledgeBase = async () => {
       if (typeof chrome !== 'undefined' && chrome.history) {
-        // Fetch last 100 items
-        const items = await chrome.history.search({
-          text: '',
-          maxResults: 100,
-          startTime: 0
-        });
-
-        // Construct the context string
-        const contextString = items.map(item => {
-          const itemString = getContextStringFromHistoryItem(item);
-          return `- [${itemString}]`;
-        }).join('\n');
-
+        const items = await chrome.history.search({ text: '', maxResults: 100, startTime: 0 });
+        const contextString = items.map(item => `- [${getContextStringFromHistoryItem(item)}]`).join('\n');
         setHistoryContext(contextString);
-        console.log("Knowledge Base built with length:", contextString.length);
-        console.log(contextString);
       }
     };
-
     buildKnowledgeBase();
   }, []);
 
   const handleSend = async () => {
     if (!message.trim() || isLoading) return;
-
     const userText = message;
     setMessage('');
     setIsLoading(true);
 
-    // Add user message to UI
     const newHistory = [...chatHistory, { type: 'user', text: userText }];
     setChatHistory(newHistory);
 
@@ -64,7 +43,7 @@ const ChatUI = ({ onClose }) => {
         return;
       }
 
-      // 2. Create the System Prompt with Context
+     
       const systemPrompt = `
 You are a secure AI History Assistant. Your *only* purpose is to answer questions based strictly on the user's browsing logs provided below.
 
@@ -83,7 +62,6 @@ Instructions:
 - If the user asks "What video did I watch?", look for video sites in the logs and answer.
       `.trim();
 
-      // 3. Prepare messages
       const apiMessages = [
         { role: "system", content: systemPrompt },
         ...newHistory.map(msg => ({
@@ -92,9 +70,7 @@ Instructions:
         }))
       ];
 
-      // 4. Call Gemini
       const aiResponse = await generateChatCompletion(apiMessages, apiKey);
-
       setChatHistory(prev => [...prev, { type: 'agent', text: aiResponse }]);
 
     } catch (error) {
@@ -112,26 +88,42 @@ Instructions:
   return (
     <div className="chat-ui-container">
       <div className="chat-header">
-        <h4>AI History Chat</h4>
-        <button onClick={onClose}>X</button>
+        <h4>AI Agent</h4>
+        <button onClick={onClose}>✕</button>
       </div>
 
       <div className="chat-history">
-        <HistoryUI chatHistory={chatHistory} />
-        {isLoading && <div style={{ padding: '10px', color: '#666', fontStyle: 'italic' }}>Analyzing history...</div>}
+        {chatHistory.map((msg, index) => (
+          <div key={index} className={`message-wrapper ${msg.type}`}>
+            <div className="message-bubble">
+              {msg.text}
+            </div>
+          </div>
+        ))}
+        
+        {isLoading && (
+          <div className="message-wrapper agent">
+            <div className="message-bubble" style={{ fontStyle: 'italic', color: '#666' }}>
+              Typing...
+            </div>
+          </div>
+        )}
+        
         <div ref={messagesEndRef} />
       </div>
 
       <div className="chat-input">
         <textarea
-          rows={2}
+          rows={1}
           value={message}
           onChange={(e) => setMessage(e.target.value)}
-          placeholder="Ask about your browsing..."
-          onKeyDown={(e) => e.key === 'Enter' && !e.shiftKey && handleSend()}
+          placeholder="Ask about your history..."
+          onKeyDown={(e) => e.key === 'Enter' && !e.shiftKey && (e.preventDefault(), handleSend())}
           disabled={isLoading}
         />
-        <button onClick={handleSend} disabled={isLoading}>Send</button>
+        <button onClick={handleSend} disabled={isLoading || !message.trim()}>
+          ➤
+        </button>
       </div>
     </div>
   );

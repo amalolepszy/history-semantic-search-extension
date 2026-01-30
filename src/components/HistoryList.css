@@ -1,14 +1,16 @@
 .history-list-container {
   flex: 1;
   overflow-y: auto;
-  padding: 12px;
-  background: #d4dbff;
-  background: linear-gradient(90deg,rgba(212, 219, 255, 1) 0%, rgba(255, 255, 255, 1) 50%, rgba(212, 219, 255, 1) 100%);
+  padding: 16px 20px;
+  background-color: #f8f9fa; /* Jasne, płaskie tło */
 }
 
 .no-data {
-  text-align: center;
-  color: #5f6368;
-  margin-top: 30px;
-  font-size: 14px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  color: #9ca3af;
+  font-size: 15px;
 }
