@@ -16,8 +16,8 @@
 .search-box {
   width: 100%;
   padding: 10px;
-  border: 1px solid #dadce0;
-  border-radius: 6px;
+  border: 1px solid #949494;
+  border-radius: 50px;
   box-sizing: border-box;
   font-size: 14px;
 }
@@ -32,18 +32,21 @@
 }
 
 .btn-semantic {
-  background-color: #673ab7; /* Purple for AI */
+  background: #52C234;
   color: white;
   border: none;
-  border-radius: 6px;
+  border-radius: 60px;
   padding: 0 12px;
-  font-size: 16px;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-weight: 700;
   cursor: pointer;
   transition: background 0.2s;
 }
 
 .btn-semantic:hover {
-  background-color: #5e35b1;
+  filter: brightness(80%);
 }
 
 .btn-semantic:disabled {
@@ -52,15 +55,21 @@
 }
 
 .ai-agent-btn {
-  background-color: rgb(11, 207, 11);
+  background: #264aff;
+  background: linear-gradient(90deg,rgba(38, 74, 255, 1) 0%, rgba(255, 46, 88, 1) 100%);
   color: white;
   width: 100%;
   padding: 10px;
   border: 1px solid #dadce0;
-  border-radius: 6px;
+  border-radius: 60px;
   box-sizing: border-box;
-  font-size: 14px;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-weight: 700;
+  margin-top: 20px;
+  cursor: pointer;
 }
 .ai-agent-btn:hover {
-  background-color: rgb(0, 180, 0);
+  filter: brightness(80%);
 }
