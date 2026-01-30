@@ -30,6 +30,8 @@
   color: white;
   align-self: flex-end;
   margin-left: auto;
+  padding: 15px;
+  border-radius: 10px;
 }
 
 .history-ui li.agent {
@@ -37,4 +39,5 @@
   color: black;
   align-self: flex-start;
   margin-right: auto;
+  padding: 15px;
 }

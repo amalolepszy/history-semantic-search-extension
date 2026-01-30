@@ -1,75 +1,90 @@
 .header-container {
-  padding: 16px;
-  background-color: #ffffff;
-  border-bottom: 1px solid #e0e0e0;
+  padding: 16px 20px;
+  background-color: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px); /* Efekt szkła */
+  border-bottom: 1px solid #f0f0f0;
   position: sticky;
   top: 0;
-  z-index: 10;
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
 }
 
 .header-title {
-  margin: 0 0 12px 0;
-  font-size: 1.1rem;
-  color: #202124;
-}
-
-.search-box {
-  width: 100%;
-  padding: 10px;
-  border: 1px solid #949494;
-  border-radius: 50px;
-  box-sizing: border-box;
-  font-size: 14px;
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #1a1a1a;
+  letter-spacing: -0.5px;
 }
 
 .search-group {
   display: flex;
-  gap: 8px;
+  gap: 10px;
+  align-items: center;
 }
 
 .search-box {
-  flex: 1; /* Input takes available space */
+  flex: 1;
+  padding: 10px 16px;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  background: #f9fafb;
+  font-size: 14px;
+  transition: all 0.2s ease;
+  outline: none;
+}
+
+.search-box:focus {
+  background: #fff;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
 }
 
 .btn-semantic {
-  background: #52C234;
+  background: #10b981;
   color: white;
   border: none;
-  border-radius: 60px;
-  padding: 0 12px;
-  font-size: 11px;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  font-weight: 700;
+  border-radius: 12px;
+  padding: 0 16px;
+  height: 40px;
+  font-size: 12px;
+  font-weight: 600;
   cursor: pointer;
-  transition: background 0.2s;
+  transition: transform 0.1s, filter 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .btn-semantic:hover {
-  filter: brightness(80%);
+  filter: brightness(105%);
+  transform: translateY(-1px);
 }
 
-.btn-semantic:disabled {
-  background-color: #ccc;
-  cursor: not-allowed;
+.btn-semantic:active {
+  transform: translateY(1px);
 }
 
 .ai-agent-btn {
-  background: #264aff;
-  background: linear-gradient(90deg,rgba(38, 74, 255, 1) 0%, rgba(255, 46, 88, 1) 100%);
+  background: #5B25FF;
+  background: linear-gradient(-90deg,rgba(91, 37, 255, 1) 0%, rgba(244, 0, 255, 1) 100%);
   color: white;
   width: 100%;
   padding: 10px;
-  border: 1px solid #dadce0;
-  border-radius: 60px;
-  box-sizing: border-box;
-  font-size: 11px;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  font-weight: 700;
-  margin-top: 20px;
+  border: none;
+  border-radius: 12px;
+  font-size: 13px;
+  font-weight: 600;
   cursor: pointer;
+  transition: background 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
 }
+
 .ai-agent-btn:hover {
-  filter: brightness(80%);
+  filter: brightness(0.8);
 }
