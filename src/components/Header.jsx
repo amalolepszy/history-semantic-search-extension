@@ -20,7 +20,7 @@ const Header = ({ searchTerm, onSearch, onSemanticSearch, isSearching, onOpenCha
           disabled={isSearching}
           title="AI Semantic Search"
         >
-          {isSearching ? '...' : 'Search!'}
+          {isSearching ? '...' : 'Search'}
         </button>
       </div>
       <button className="ai-agent-btn" onClick={onOpenChat}>

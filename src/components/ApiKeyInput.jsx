@@ -45,7 +45,7 @@ const ApiKeyInput = () => {
         <div className="key-input-group">
           <input
             type="password"
-            placeholder="sk-..."
+            placeholder="Paste your key here..."
             value={key}
             onChange={(e) => setKey(e.target.value)}
             className="input-key"
