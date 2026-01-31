@@ -38,7 +38,7 @@ const ApiKeyInput = () => {
     <div className="api-key-container">
       {saved ? (
         <div className="key-status success">
-          <span>✅ OpenAI Key Active</span>
+          <span>✅ Gemini Key Active</span>
           <button onClick={handleClear} className="btn-text">Change</button>
         </div>
       ) : (

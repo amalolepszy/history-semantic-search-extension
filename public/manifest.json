@@ -1,6 +1,6 @@
 {
   "manifest_version": 3,
-  "name": "History Semantic Search",
+  "name": "Smart History Explorer",
   "description": "Browse history semantically in the side panel",
   "version": "1.0",
   "permissions": ["history", "sidePanel", "storage"],
