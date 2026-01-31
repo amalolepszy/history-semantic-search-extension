@@ -4,7 +4,7 @@ const Header = ({ searchTerm, onSearch, onSemanticSearch, isSearching, onOpenCha
   const [agentOpen, setAgentOpen] = useState(false);
   return (
     <header className="header-container">
-      <h3 className="header-title">History Explorer</h3>
+      <h3 className="header-title">Search History Semantically</h3>
       <div className="search-group">
         <input
           type="text"
